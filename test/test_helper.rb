@@ -1,7 +1,7 @@
 require File.expand_path('../../lib/autodiscover.rb', __FILE__)
 require 'minitest/autorun'
-require "minitest/autorun"
-require "mocha/mini_test"
+require 'minitest/autorun'
+require 'mocha/mini_test'
 
 TEST_DIR = File.dirname(__FILE__)
 
