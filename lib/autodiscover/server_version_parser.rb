@@ -3,20 +3,20 @@ module Autodiscover
 
     VERSIONS = {
       8 => {
-        0 => "Exchange2007",
-        1 => "Exchange2007_SP1",
-        2 => "Exchange2007_SP1",
-        3 => "Exchange2007_SP1",
+        0 => 'Exchange2007',
+        1 => 'Exchange2007_SP1',
+        2 => 'Exchange2007_SP1',
+        3 => 'Exchange2007_SP1',
       },
       14 => {
-        0 => "Exchange2010",
-        1 => "Exchange2010_SP1",
-        2 => "Exchange2010_SP2",
-        3 => "Exchange2010_SP2",
+        0 => 'Exchange2010',
+        1 => 'Exchange2010_SP1',
+        2 => 'Exchange2010_SP2',
+        3 => 'Exchange2010_SP2',
       },
       15 => {
-        0 => "Exchange2013",
-        1 => "Exchange2013_SP1",
+        0 => 'Exchange2013',
+        1 => 'Exchange2013_SP1',
       }
     }
 
@@ -38,7 +38,7 @@ module Autodiscover
 
     def exchange_version
       v = VERSIONS[major][minor]
-      v.nil? ? VERIONS[8][0] : v
+      v.nil? ? VERSIONS[8][0] : v
     end
 
   end
