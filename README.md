@@ -63,14 +63,14 @@ Installation
 
 ### Configuring a Rails App to use the latest GitHub master version
 
-	  gem 'autodiscover', :git => 'git://github.com/WinRb/autodiscover.git'
+    gem 'autodiscover', :git => 'git://github.com/WinRb/autodiscover.git'
 
 ### To install the latest development version from the GitHub master
 
-	  git clone http://github.com/WinRb/autodiscover.git
-	  cd autodiscover
-	  gem build autodiscover.gemspec
-	  sudo gem install autodiscover-<version>.gem
+    git clone http://github.com/WinRb/autodiscover.git
+    cd autodiscover
+    gem build autodiscover.gemspec
+    sudo gem install autodiscover-<version>.gem
 
 Bugs and Issues
 ---------------
