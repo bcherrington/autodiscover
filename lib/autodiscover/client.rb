@@ -12,10 +12,13 @@ module Autodiscover
     #   the one parsed from the e-mail.
     def initialize(email:, password:, username: nil, domain: nil)
       @email = email
-      @domain = domain || @email.split("@").last
+      @domain = domain || @email.split('@').last
       @http = HTTPClient.new
       @username = username || email
       @http.set_auth(nil, @username, password)
+      # TODO make these files & locations configurable
+      @http.ssl_config.add_trust_ca('/etc/pki/tls/certs/ca-bundle.crt')
+      @http.ssl_config.add_trust_ca('/etc/pki/tls/certs/ca-bundle.trust.crt')
     end
 
     # @param type [Symbol] The type of response. Right now this is just :pox
