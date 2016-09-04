@@ -11,9 +11,9 @@ module Autodiscover
     # @param domain [String] An optional domain to provide as an override for
     #   the one parsed from the e-mail.
     def initialize(email:, password:, username: nil, domain: nil)
-      @email = email
-      @domain = domain || @email.split('@').last
-      @http = HTTPClient.new
+      @email    = email
+      @domain   = domain || @email.split('@').last
+      @http     = HTTPClient.new
       @username = username || email
       @http.set_auth(nil, @username, password)
       # TODO make these files & locations configurable
@@ -25,10 +25,12 @@ module Autodiscover
     # @param [Hash] **options
     def autodiscover(type: :pox, **options)
       case type
-      when :pox
-        PoxRequest.new(self, **options).autodiscover
-      else
-        raise Autodiscover::ArgumentError, "Not a valid autodiscover type (#{type})."
+        when :pox
+          PoxRequest.new(self, **options).autodiscover
+        when :soap
+          raise NotImplementedError, 'The SOAP autodiscover type is not implemented.'
+        else
+          raise Autodiscover::ArgumentError, "Not a valid autodiscover type (#{type})."
       end
     end
 

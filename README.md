@@ -77,6 +77,6 @@ Bugs and Issues
 
 Limitations:
 
-* Doesn't support querying the DNS for SRV Records
+* TBD
 
 Please submit additional bugs and issues here [http://github.com/WinRb/autodiscover/issues](http://github.com/WinRb/autodiscover/issues)
