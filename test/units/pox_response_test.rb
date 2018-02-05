@@ -11,15 +11,14 @@ describe Autodiscover::PoxResponse do
     end
 
     it 'it raises an exception if the response is empty or nil' do
-      ->{_class.new ''
-      }.must_raise(Autodiscover::ArgumentError)
+      ->{_class.new ''}.must_raise(Autodiscover::ArgumentError)
       ->{_class.new nil}.must_raise(Autodiscover::ArgumentError)
     end
   end
 
   describe '#exchange_version' do
     it 'returns an Exchange version usable for EWS' do
-      _(_class.new(response).exchange_version).must_equal 'Exchange2013_SP1'
+      _(_class.new(response).exchange_version).must_equal 'Exchange2016'
     end
   end
 

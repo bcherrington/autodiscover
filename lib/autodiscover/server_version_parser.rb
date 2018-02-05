@@ -1,6 +1,5 @@
 module Autodiscover
   class ServerVersionParser
-
     VERSIONS = {
       8 => {
         0 => 'Exchange2007',
@@ -16,12 +15,12 @@ module Autodiscover
       },
       15 => {
         0 => 'Exchange2013',
-        1 => 'Exchange2013_SP1',
+        1 => 'Exchange2016',
       }
-    }
+    }.freeze
 
-    def initialize(hexversion)
-      @version = hexversion.hex.to_s(2).rjust(hexversion.size*4, '0')
+    def initialize(hex_version)
+      @version = hex_version.hex.to_s(2).rjust(hex_version.size*4, '0')
     end
 
     def major
