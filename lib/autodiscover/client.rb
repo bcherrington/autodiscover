@@ -15,10 +15,16 @@ module Autodiscover
       @domain   = domain || @email.split('@').last
       @http     = HTTPClient.new
       @username = username || email
-      @http.set_auth(nil, @username, password)
-      # TODO make these files & locations configurable
-      @http.ssl_config.add_trust_ca('/etc/pki/tls/certs/ca-bundle.crt')
-      @http.ssl_config.add_trust_ca('/etc/pki/tls/certs/ca-bundle.trust.crt')
+
+      if username && domain
+        @http.set_auth(@domain, @username, password)
+      else
+        @http.set_auth(nil, @username, password)
+      end
+
+      # Autodiscover::CA_BUNDLE.each do |filename|
+      #   @http.ssl_config.add_trust_ca(filename)
+      # end
     end
 
     # @param type [Symbol] The type of response. Right now this is just :pox
