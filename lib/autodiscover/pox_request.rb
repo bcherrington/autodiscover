@@ -23,8 +23,11 @@ module Autodiscover
         response = do_request url
         break unless response.nil?
       end
+
       # TODO: response should include status and return values
       response
+
+
     end
 
     private
@@ -43,6 +46,8 @@ module Autodiscover
             response = autodiscover(http_response.headers['Location'])
           when InvalidRequest
             response = nil
+          when InvalidCredentials
+            response = PoxFailedResponse.new(1, 'Incorrect login credentials')
           else
             response = http_response
         end
@@ -67,7 +72,7 @@ module Autodiscover
         logger.debug e.message
         options[:ignore_ssl_errors] ? (response = nil) : raise
       end
-      logger.debug "#{url} xml_response: #{response}"
+      response.nil? ? logger.debug("#{url} returned nil response") : logger.debug("#{url} xml_response: #{response}")
       response
     end
 
@@ -94,6 +99,12 @@ module Autodiscover
     class InvalidRequest
       def self.===(item)
         item.status == 400 || item.status == 404 || item.status == 405 || item.status == 406
+      end
+    end
+
+    class InvalidCredentials
+      def self.===(item)
+        item.status == 401
       end
     end
 
