@@ -47,14 +47,14 @@ module Autodiscover
           when InvalidRequest
             response = nil
           when InvalidCredentials
-            response = PoxFailedResponse.new(1, 'Incorrect login credentials')
+            response = PoxFailedResponse.new(401, 'Incorrect login credentials')
           else
             response = http_response
         end
       rescue SocketError => e
         logger.debug "#{url} SocketError"
         logger.debug e.message
-        response = nil
+        e.message.include?('No such host is known.') ? response = PoxFailedResponse.new(1, 'Unknown host. Ensure domain is correct') : response = PoxFailedResponse.new(1, e.message)
       rescue HTTPClient::ConnectTimeoutError => e
         logger.debug "#{url} HTTPClient::ConnectTimeoutError"
         logger.debug e.message
@@ -66,7 +66,7 @@ module Autodiscover
       rescue Errno::ECONNREFUSED => e
         logger.debug "#{url} Errno::ECONNREFUSED"
         logger.debug e.message
-        response = nil
+        response = PoxFailedResponse.new(2, e.message)
       rescue OpenSSL::SSL::SSLError => e
         logger.debug "#{url} OpenSSL::SSL::SSLError"
         logger.debug e.message

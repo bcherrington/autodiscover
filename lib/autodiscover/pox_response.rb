@@ -5,6 +5,17 @@ module Autodiscover
     def initialize(response)
       raise Autodiscover::ArgumentError, 'Response must be an XML string' if response.nil? || response.empty?
       @response = Nori.new(parser: :nokogiri).parse(response)['Autodiscover']['Response']
+      @logger = Logging.logger[self.class.name]
+    end
+
+    def dump_details
+      @logger.info "EWS URL: #{ews_url.to_s}"
+      @logger.info "Exchange version: #{exchange_version.to_s}"
+      @logger.info "User display name: #{user_display_name.to_s}"
+      @logger.info "Redirected: #{redirect?.to_s}"
+      if redirect?
+        @logger.info "Redirect URL: #{redirect_url.to_s}"
+      end
     end
 
     def user_display_name
