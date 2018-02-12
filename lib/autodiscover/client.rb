@@ -23,9 +23,12 @@ module Autodiscover
         @http.set_auth(nil, @username, password)
       end
 
-      Autodiscover::CA_BUNDLE.each do |filename|
-        @http.ssl_config.add_trust_ca(filename)
+      if ca_bundle
+        ca_bundle.each do |filename|
+          @http.ssl_config.add_trust_ca(filename)
+        end
       end
+
 
     end
 
