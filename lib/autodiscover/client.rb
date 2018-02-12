@@ -10,11 +10,12 @@ module Autodiscover
     #   with something other than the e-mail. For instance DOMAIN\user
     # @param domain [String] An optional domain to provide as an override for
     #   the one parsed from the e-mail.
-    def initialize(email:, password:, username: nil, domain: nil)
+    def initialize(email:, password:, username: nil, domain: nil, ca_bundle: nil)
       @email    = email
       @domain   = domain || @email.split('@').last
       @http     = HTTPClient.new
       @username = username || email
+      Autodiscover.CA_BUNDLE = ca_bundle if ca_bundle
 
       if username && domain
         @http.set_auth(@domain, @username, password)
@@ -22,9 +23,10 @@ module Autodiscover
         @http.set_auth(nil, @username, password)
       end
 
-      # Autodiscover::CA_BUNDLE.each do |filename|
-      #   @http.ssl_config.add_trust_ca(filename)
-      # end
+      Autodiscover::CA_BUNDLE.each do |filename|
+        @http.ssl_config.add_trust_ca(filename)
+      end
+
     end
 
     def logger
