@@ -42,5 +42,20 @@ feature 'User attempts to discover' do
 
   end
 
+  scenario 'with specified CA_BUNDLE' do
+
+    bundle = %w[path\to\ca-bundle.crt]
+    email = 'chronosync@chronologic.co.za'
+    password = '*censored'
+
+    client = Autodiscover::Client.new(email: email, password: password, ca_bundle: bundle)
+    data = client.autodiscover
+    data.dump_details
+
+    expect(data).to be_a(Autodiscover::PoxResponse)
+    expect(data).not_to be_a(Autodiscover::PoxFailedResponse)
+
+  end
+
 end
 
