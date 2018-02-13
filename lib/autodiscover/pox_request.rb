@@ -24,8 +24,7 @@ module Autodiscover
         break unless response.nil?
       end
 
-      # TODO: response should include status and return values
-      response
+      response.nil? ? PoxFailedResponse.new(0, 'Unknown error occured. Autodiscovery failed.') : response
 
 
     end
