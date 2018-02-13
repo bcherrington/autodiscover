@@ -15,7 +15,6 @@ module Autodiscover
       @domain   = domain || @email.split('@').last
       @http     = HTTPClient.new
       @username = username || email
-      Autodiscover.CA_BUNDLE = ca_bundle if ca_bundle
 
       if username && domain
         @http.set_auth(@domain, @username, password)
