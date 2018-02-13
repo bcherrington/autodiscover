@@ -21,7 +21,7 @@ module Autodiscover
       response = nil
       available_urls(domain) do |url|
         response = do_request url
-        break unless (response.nil? || (response.is_a? PoxFailedResponse))
+        break unless (response.nil? || (response.is_a?(PoxFailedResponse) && response.code != 401))
       end
 
       response.nil? ? PoxFailedResponse.new(0, 'Unknown error occurred. Autodiscovery failed.') : response
