@@ -16,15 +16,15 @@ module Autodiscover
       @domain  = client.domain
     end
 
-    # @return [Autodiscover::PoxResponse, nil]
+    # @return [Autodiscover::PoxResponse, Autodiscover::PoxFailedResponse]
     def autodiscover(domain = @domain)
       response = nil
       available_urls(domain) do |url|
         response = do_request url
-        break unless response.nil?
+        break unless (response.nil? || (response.is_a? PoxFailedResponse))
       end
 
-      response.nil? ? PoxFailedResponse.new(0, 'Unknown error occured. Autodiscovery failed.') : response
+      response.nil? ? PoxFailedResponse.new(0, 'Unknown error occurred. Autodiscovery failed.') : response
 
 
     end
@@ -44,9 +44,9 @@ module Autodiscover
           when Redirect
             response = autodiscover(http_response.headers['Location'])
           when InvalidRequest
-            response = nil
+            response = PoxFailedResponse.new(404, 'Server returned invalid request error')
           when InvalidCredentials
-            response = PoxFailedResponse.new(401, 'Incorrect login credentials')
+            response = PoxFailedResponse.new(401, 'Access denied. Ensure login credentials are correct')
           else
             response = http_response
         end
@@ -57,11 +57,11 @@ module Autodiscover
       rescue HTTPClient::ConnectTimeoutError => e
         logger.debug "#{url} HTTPClient::ConnectTimeoutError"
         logger.debug e.message
-        response = nil
+        response = PoxFailedResponse.new(3, e.message)
       rescue Errno::ENETUNREACH => e
         logger.debug "#{url} Errno::ENETUNREACH"
         logger.debug e.message
-        response = nil
+        response = PoxFailedResponse.new(4, e.message)
       rescue Errno::ECONNREFUSED => e
         logger.debug "#{url} Errno::ECONNREFUSED"
         logger.debug e.message
@@ -69,9 +69,9 @@ module Autodiscover
       rescue OpenSSL::SSL::SSLError => e
         logger.debug "#{url} OpenSSL::SSL::SSLError"
         logger.debug e.message
-        options[:ignore_ssl_errors] ? (response = nil) : raise
+        options[:ignore_ssl_errors] ? (response = PoxFailedResponse.new(5, e.message)) : raise
       end
-      response.nil? ? logger.debug("#{url} returned nil response") : logger.debug("#{url} xml_response: #{response}")
+      response.is_a?(PoxFailedResponse) ? logger.debug("#{url} returned failure response") : logger.debug("#{url} xml_response: #{response}")
       response
     end
 
